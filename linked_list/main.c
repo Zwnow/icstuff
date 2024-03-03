@@ -108,6 +108,51 @@ void remove_first(List *l) {
     return;
 }
 
+void remove_last(List *l) {
+    if (l->elements == 0) {
+        return;
+    }
+    if (l->elements == 1) {
+        Node *temp = l->head;
+        l->head = NULL;
+        l->tail = NULL;
+        free(temp);
+        l->elements--;
+        return;
+    }
+
+    Node *runner = l->head;
+    while(runner->next != l->tail && runner->next != NULL) {
+        runner = runner->next;
+    }
+    Node *temp = l->tail;
+    l->tail = runner;
+    l->tail->next = NULL;
+    free(temp);
+    l->elements--;
+    return;
+}
+
+int search(List *l, void *value) {
+    if (l->elements == 0) {
+        return -1;
+    }
+    
+    int index = 0;
+    Node *runner = l->head;
+    if (runner->value == value) {
+        return index;
+    }
+    while (runner->value != value && runner->next != NULL) {
+        runner = runner->next;
+        index++;
+    }
+    if (runner->value == value) {
+        return index;
+    }
+    return -1;
+}
+
 int main(void) {
     List* l = init_list();
     int a = 1;
@@ -117,6 +162,6 @@ int main(void) {
     add_first(l, &a);
     add_last(l, &b);
     add(l, &c, 2);
-    remove_first(l);
+    printf("%i\n",search(l, &c));
     print_list(l);
 }
